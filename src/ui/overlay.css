@@ -1,0 +1,72 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(31, 40, 80, 0.42);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  animation: fade-in var(--dur) ease;
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.overlay__panel {
+  width: min(560px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  background: var(--cream);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-lg);
+  animation: pop-in var(--dur-slow) var(--ease-squish);
+  outline: none;
+}
+.overlay__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 22px 22px 6px;
+}
+.overlay__title {
+  font-size: 1.5rem;
+  color: var(--navy);
+}
+.overlay__body { padding: 8px 22px 26px; }
+
+/* ---------- Bottom sheet ---------- */
+.sheet-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgba(31, 40, 80, 0.28);
+  animation: fade-in var(--dur) ease;
+}
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 91;
+  background: var(--cream);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  box-shadow: 0 -14px 40px rgba(31, 40, 80, 0.22);
+  padding: 10px 18px calc(18px + env(safe-area-inset-bottom));
+  max-height: 62vh;
+  overflow: auto;
+  animation: sheet-up var(--dur-slow) var(--ease-squish);
+}
+.sheet__grip {
+  width: 46px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(31, 40, 80, 0.18);
+  margin: 4px auto 12px;
+}
+.sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.sheet__title { font-size: 1.2rem; }

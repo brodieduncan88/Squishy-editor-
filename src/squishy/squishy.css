@@ -1,0 +1,39 @@
+.squishy-holder {
+  display: inline-block;
+  position: relative;
+  will-change: transform;
+}
+.squishy-holder.is-floating {
+  animation: float-soft 5s var(--ease-squish) infinite;
+}
+.squishy-body {
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 62%;
+}
+.squishy-body svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.squishy-body.is-interactive {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.squishy-body.is-interactive:active {
+  transform: scale(0.98);
+}
+.squishy-body.is-squashing {
+  animation: squash 440ms var(--ease-squish);
+}
+.squishy-body.is-interactive:focus-visible {
+  outline: none;
+}
+.squishy-body.is-interactive:focus-visible svg {
+  filter: drop-shadow(0 0 0 var(--lavender));
+  outline: 3px solid var(--lavender);
+  outline-offset: 6px;
+  border-radius: 40px;
+}

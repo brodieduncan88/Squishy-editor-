@@ -1,0 +1,51 @@
+/* Shared keyframes for the playful, soft-3D motion language. */
+
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50%      { transform: translateY(-14px) rotate(var(--r, 0deg)); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-9px); }
+}
+
+@keyframes squash {
+  0%   { transform: scale(1, 1); }
+  35%  { transform: scale(1.12, 0.86); }
+  70%  { transform: scale(0.94, 1.06); }
+  100% { transform: scale(1, 1); }
+}
+
+@keyframes pop-in {
+  0%   { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes sheet-up {
+  0%   { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.8) rotate(0deg); }
+  50%      { opacity: 1; transform: scale(1.15) rotate(20deg); }
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
+}
+
+@keyframes lid-lift {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-90px) rotate(-12deg); opacity: 0; }
+}
+
+@keyframes rise-out {
+  0%   { transform: translateY(30px) scale(0.6); opacity: 0; }
+  60%  { transform: translateY(-10px) scale(1.06); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.is-squashing { animation: squash 420ms var(--ease-squish); }
