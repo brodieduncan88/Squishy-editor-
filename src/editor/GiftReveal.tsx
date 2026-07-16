@@ -5,6 +5,7 @@ import SquishyPreview from '../squishy/SquishyPreview';
 import type { EditorState } from '../state/editorState';
 import { WRAPPING_MAP, RIBBON_MAP, GIFT_BOX_MAP } from '../data';
 import { downloadCard } from '../lib/exportImage';
+import { sound } from '../audio/sound';
 
 const wrapBg = (state: EditorState): string => {
   const w = WRAPPING_MAP[state.wrapping];
@@ -67,7 +68,15 @@ export default function GiftReveal({ open, state, onClose, onSendLink }: Props) 
             <div className="wrapped-box__ribbon-h" />
             <div className="wrapped-box__bow" aria-hidden="true">🎀</div>
           </div>
-          <Button variant="primary" size="lg" icon="gift" onClick={() => setRevealed(true)}>
+          <Button
+            variant="primary"
+            size="lg"
+            icon="gift"
+            onClick={() => {
+              setRevealed(true);
+              sound.play('success');
+            }}
+          >
             Open the Gift
           </Button>
         </div>

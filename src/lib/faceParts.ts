@@ -54,5 +54,5 @@ export function renderFace(eyes: string, mth: string, cheeks: boolean): string {
     ? `<ellipse cx="-34" cy="16" rx="10" ry="7" fill="#FF8FCB" opacity="0.55"/>
        <ellipse cx="34" cy="16" rx="10" ry="7" fill="#FF8FCB" opacity="0.55"/>`
     : '';
-  return `${cheekMarkup}${eye(-EX, eyes)}${eye(EX, eyes)}${mouth(mth)}`;
+  return `${cheekMarkup}<g class="sq-eyes">${eye(-EX, eyes)}${eye(EX, eyes)}</g>${mouth(mth)}`;
 }

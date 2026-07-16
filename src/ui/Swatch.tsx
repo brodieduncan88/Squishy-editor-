@@ -1,5 +1,6 @@
 import Icon from './Icon';
 import { readableInk } from '../lib/colour';
+import { sound } from '../audio/sound';
 
 interface Props {
   colour: string; // css colour or gradient
@@ -28,7 +29,10 @@ export default function Swatch({
       aria-pressed={selected}
       aria-label={label}
       title={label}
-      onClick={onSelect}
+      onClick={() => {
+        sound.play('select');
+        onSelect();
+      }}
     >
       {selected && (
         <span className="swatch__check" style={{ color: ink }}>

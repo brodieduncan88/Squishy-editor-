@@ -1,6 +1,7 @@
 import { useId, useMemo, useRef, useState } from 'react';
 import { buildSquishy } from '../lib/buildSquishy';
 import type { EditorState } from '../state/editorState';
+import { sound } from '../audio/sound';
 import './squishy.css';
 
 interface Props {
@@ -38,6 +39,7 @@ export default function SquishyPreview({
     if (!interactive) return;
     setSquashing(false);
     window.clearTimeout(timer.current);
+    sound.play('squish');
     // restart animation on rapid clicks
     requestAnimationFrame(() => setSquashing(true));
     timer.current = window.setTimeout(() => setSquashing(false), 440);

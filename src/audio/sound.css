@@ -1,0 +1,17 @@
+.sound-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  min-width: 44px;
+  min-height: 44px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: var(--sh-sm);
+  transition: transform var(--dur-fast) var(--ease-squish), background var(--dur);
+}
+.sound-toggle:active { transform: scale(0.9); }
+.sound-toggle--light { background: rgba(255, 255, 255, 0.85); color: var(--navy); }
+.sound-toggle--dark { background: rgba(31, 40, 80, 0.14); color: #fff; }
+.sound-toggle.is-on { background: var(--mint); color: var(--navy); }

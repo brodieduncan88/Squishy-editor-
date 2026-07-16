@@ -17,6 +17,29 @@
   display: block;
   overflow: visible;
 }
+/* Subtle life: occasional blink + a breathing contact shadow. */
+.squishy-body svg .sq-eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sq-blink 6s ease-in-out infinite;
+}
+.squishy-body svg .sq-shadow {
+  transform-box: view-box;
+  transform-origin: 150px 268px;
+  animation: sq-breathe 5s var(--ease-squish) infinite;
+}
+@keyframes sq-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.1); }
+}
+@keyframes sq-breathe {
+  0%, 100% { transform: scaleX(1); opacity: 1; }
+  50% { transform: scaleX(0.88); opacity: 0.82; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .squishy-body svg .sq-eyes,
+  .squishy-body svg .sq-shadow { animation: none; }
+}
 .squishy-body.is-interactive {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;

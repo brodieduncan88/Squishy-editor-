@@ -1,0 +1,30 @@
+/* Scroll-reveal transitions. A spring-ish cubic-bezier gives the squishy feel. */
+.reveal {
+  --reveal-delay: 0ms;
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.7s ease;
+  transition-delay: var(--reveal-delay);
+  will-change: transform, opacity;
+}
+.reveal--up { opacity: 0; transform: translateY(38px); }
+.reveal--scale { opacity: 0; transform: scale(0.9); }
+.reveal--blur { opacity: 0; filter: blur(14px); transform: translateY(20px); }
+.reveal--left { opacity: 0; transform: translateX(-48px); }
+.reveal--right { opacity: 0; transform: translateX(48px); }
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}

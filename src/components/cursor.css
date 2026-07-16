@@ -1,0 +1,38 @@
+.cursor-ring,
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  border-radius: 50%;
+}
+.cursor-ring {
+  width: 42px;
+  height: 42px;
+  border: 2.5px solid rgba(69, 174, 239, 0.7);
+  background: rgba(69, 174, 239, 0.08);
+  backdrop-filter: invert(2%);
+  transition: width 0.25s var(--ease-squish), height 0.25s var(--ease-squish),
+    background 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+}
+.cursor-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--pink);
+  box-shadow: 0 0 12px rgba(244, 139, 216, 0.8);
+}
+.cursor-ring.is-hover {
+  width: 66px;
+  height: 66px;
+  background: rgba(244, 139, 216, 0.14);
+  border-color: rgba(244, 139, 216, 0.8);
+}
+.cursor-ring.is-down { width: 32px; height: 32px; background: rgba(244, 139, 216, 0.25); }
+.cursor-ring.is-hidden { opacity: 0; }
+
+/* Hide the native cursor only when ours is active. */
+body.has-custom-cursor,
+body.has-custom-cursor * {
+  cursor: none !important;
+}

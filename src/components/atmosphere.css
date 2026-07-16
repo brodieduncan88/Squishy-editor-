@@ -1,0 +1,50 @@
+.atmos {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.atmos__aurora { position: absolute; inset: -10%; filter: blur(60px); }
+.atmos__blob {
+  position: absolute;
+  width: 46vw;
+  height: 46vw;
+  border-radius: 50%;
+  opacity: 0.5;
+  mix-blend-mode: screen;
+  animation: drift 26s ease-in-out infinite;
+}
+.atmos__blob--pink { background: #F48BD8; top: -6%; left: -4%; }
+.atmos__blob--mint { background: #72E6A6; top: 30%; right: -8%; animation-delay: -6s; animation-duration: 32s; }
+.atmos__blob--lav { background: #B69AF8; bottom: -10%; left: 18%; animation-delay: -12s; animation-duration: 30s; }
+.atmos__blob--lemon { background: #FFE667; top: 8%; right: 24%; animation-delay: -18s; animation-duration: 36s; opacity: 0.4; }
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(6vw, 4vw) scale(1.12); }
+  66% { transform: translate(-5vw, 6vw) scale(0.94); }
+}
+
+/* Fine film grain — an inline SVG noise, tiled. */
+.atmos__grain {
+  position: absolute;
+  inset: -200%;
+  width: 500%;
+  height: 500%;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 0.6s steps(3) infinite;
+  mix-blend-mode: overlay;
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-2%, 1%); }
+  66% { transform: translate(1%, -2%); }
+  100% { transform: translate(0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atmos__blob { animation: none; }
+  .atmos__grain { animation: none; }
+}

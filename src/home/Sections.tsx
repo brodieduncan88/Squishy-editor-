@@ -7,6 +7,8 @@ import SquishyPreview from '../squishy/SquishyPreview';
 import { GALLERY_SQUISHIES, preset } from '../lib/presets';
 import { DESIGN_PACKS } from '../data';
 import type { Category } from '../data';
+import { Reveal } from '../lib/reveal';
+import { sound } from '../audio/sound';
 
 /* ---------- How It Works ---------- */
 const STEPS: { icon: IconName; title: string; body: string; tint: string }[] = [
@@ -27,14 +29,20 @@ export function HowItWorks() {
         />
         <div className="how-grid">
           {STEPS.map((s, i) => (
-            <div className="how-card" key={s.title} style={{ background: s.tint }}>
+            <Reveal
+              key={s.title}
+              variant="up"
+              delay={i * 110}
+              className="how-card"
+              style={{ background: s.tint }}
+            >
               <span className="how-card__num">{i + 1}</span>
               <span className="how-card__icon">
                 <Icon name={s.icon} size={34} strokeWidth={2.6} />
               </span>
               <h3>{s.title}</h3>
               <p>{s.body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -59,19 +67,28 @@ export function Gallery() {
         />
         <div className="chip-row" role="tablist" aria-label="Squishy categories">
           {CATEGORIES.map((c) => (
-            <Chip key={c} label={c} selected={c === cat} onSelect={() => setCat(c)} />
+            <Chip
+              key={c}
+              label={c}
+              selected={c === cat}
+              onSelect={() => {
+                setCat(c);
+                sound.play('select');
+              }}
+            />
           ))}
         </div>
         <div className="gallery-grid">
           {items.map((s, i) => (
-            <button
-              className="gallery-card"
-              key={i}
-              onClick={() => nav('/editor', { state: { seed: s } })}
-              aria-label={`Customise this ${cat} squishy`}
-            >
-              <SquishyPreview state={s} size="82%" float floatDelay={i * 250} />
-            </button>
+            <Reveal key={`${cat}-${i}`} variant="scale" delay={i * 90}>
+              <button
+                className="gallery-card"
+                onClick={() => nav('/editor', { state: { seed: s } })}
+                aria-label={`Customise this ${cat} squishy`}
+              >
+                <SquishyPreview state={s} size="82%" float floatDelay={i * 250} />
+              </button>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -91,7 +108,7 @@ export function DesignPacksSection() {
           sub="Tap a pack to start with a ready-made style."
         />
         <div className="packs-grid">
-          {DESIGN_PACKS.map((p) => {
+          {DESIGN_PACKS.map((p, i) => {
             const seed = preset({
               squishyType: 'bear',
               primaryColour: p.colours[0],
@@ -100,8 +117,8 @@ export function DesignPacksSection() {
               face: 'happy',
             });
             return (
+              <Reveal key={p.id} variant="up" delay={i * 80}>
               <button
-                key={p.id}
                 className="pack-card"
                 onClick={() => nav('/editor', { state: { seed } })}
               >
@@ -116,6 +133,7 @@ export function DesignPacksSection() {
                   <Icon name="arrow-right" size={20} strokeWidth={2.8} />
                 </span>
               </button>
+              </Reveal>
             );
           })}
         </div>
@@ -181,14 +199,14 @@ export function TrustSection() {
           sub="Built to be a calm, private, friendly place to play."
         />
         <div className="trust-grid">
-          {TRUST.map((t) => (
-            <div className="trust-card" key={t.title}>
+          {TRUST.map((t, i) => (
+            <Reveal className="trust-card" key={t.title} variant="up" delay={i * 110}>
               <span className="trust-card__icon">
                 <Icon name={t.icon} size={30} strokeWidth={2.6} />
               </span>
               <h3>{t.title}</h3>
               <p>{t.body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -221,10 +239,10 @@ export function SectionHead({
   sub?: string;
 }) {
   return (
-    <div className="section-head">
+    <Reveal className="section-head" variant="up">
       <span className="section-head__kicker">{kicker}</span>
       <h2 className="section-head__title">{title}</h2>
       {sub && <p className="section-head__sub">{sub}</p>}
-    </div>
+    </Reveal>
   );
 }

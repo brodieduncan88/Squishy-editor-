@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import Icon from './Icon';
+import { sound } from '../audio/sound';
 
 interface Props {
   label: string;
@@ -26,7 +27,10 @@ export default function SelectTile({
       type="button"
       className={`tile ${selected ? 'is-selected' : ''}`}
       aria-pressed={selected}
-      onClick={onSelect}
+      onClick={() => {
+        sound.play('select');
+        onSelect();
+      }}
       style={style}
     >
       {selected && (

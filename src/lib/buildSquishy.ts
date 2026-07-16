@@ -104,6 +104,23 @@ function patternDefs(id: string, state: EditorState): string {
       <stop offset="100%" stop-color="#8FB8FF"/>
     </linearGradient>`);
 
+  // Ambient occlusion — grounds the base with soft shading toward the bottom.
+  defs.push(`<linearGradient id="${id}-ao" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="45%" stop-color="#1F2850" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#141a38" stop-opacity="0.22"/>
+    </linearGradient>`);
+  // Rim light — a bright sliver along the very top edge.
+  defs.push(`<linearGradient id="${id}-rim" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="12%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>`);
+  // Soft contact shadow on the ground.
+  defs.push(`<radialGradient id="${id}-contact" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1F2850" stop-opacity="0.28"/>
+      <stop offset="60%" stop-color="#1F2850" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#1F2850" stop-opacity="0"/>
+    </radialGradient>`);
+
   return `<defs>${defs.join('')}</defs>`;
 }
 
@@ -186,11 +203,19 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     })
     .join('');
 
-  // Gloss highlight
-  const gloss = `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-gloss)"/></g>`;
+  // Volume shading, all clipped to the silhouette.
+  const ao = `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-ao)"/></g>`;
+  const rim = `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-rim)"/></g>`;
+  const gloss =
+    `<g clip-path="url(#${clipId})">` +
+    `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-gloss)"/>` +
+    // secondary sharp specular dot
+    `<ellipse cx="112" cy="104" rx="16" ry="22" fill="#ffffff" opacity="0.65" transform="rotate(-24 112 104)"/>` +
+    `<circle cx="180" cy="120" r="6" fill="#ffffff" opacity="0.55"/>` +
+    `</g>`;
 
   const shadow = opts.shadow
-    ? `<ellipse cx="150" cy="266" rx="86" ry="18" fill="#1F2850" opacity="0.16"/>`
+    ? `<ellipse cx="150" cy="268" rx="98" ry="24" fill="url(#${id}-contact)" class="sq-shadow"/>`
     : '';
 
   return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img">
@@ -201,6 +226,8 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     ${body}
     ${overlay}
     ${details}
+    ${ao}
+    ${rim}
     ${gloss}
     ${face}
     ${accessories}

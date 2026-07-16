@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Logo } from '../home/Header';
 import Button, { IconButton } from '../ui/Button';
+import SoundToggle from '../audio/SoundToggle';
 import type { EditorApi } from '../state/useEditorHistory';
 
 export default function EditorHeader({
@@ -19,6 +20,7 @@ export default function EditorHeader({
         <IconButton name="redo" label="Redo" onClick={api.redo} disabled={!api.canRedo} />
       </div>
       <div className="editor-header__right">
+        <SoundToggle tone="light" />
         <IconButton
           name="heart"
           label="My Creations"

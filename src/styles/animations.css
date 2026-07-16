@@ -48,4 +48,23 @@
   100% { transform: translateY(0) scale(1); opacity: 1; }
 }
 
+@keyframes page-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .is-squashing { animation: squash 420ms var(--ease-squish); }
+
+/* Gentle page-enter for route changes. */
+.home__content,
+.editor,
+.subpage,
+.shared {
+  animation: page-in 0.5s ease both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .home__content,
+  .editor,
+  .subpage,
+  .shared { animation: none; }
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Button, { IconButton } from '../ui/Button';
+import SoundToggle from '../audio/SoundToggle';
 
 export function Logo() {
   return (
@@ -48,6 +49,7 @@ export default function Header() {
           ))}
         </nav>
         <div className="site-header__cta">
+          <SoundToggle tone="dark" />
           <Button variant="primary" onClick={() => nav('/editor')}>
             Start Creating
           </Button>
