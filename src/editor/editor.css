@@ -149,7 +149,8 @@
   border-radius: var(--r-pill);
   box-shadow: var(--sh-md);
 }
-.stage__tools { position: absolute; top: 14px; right: 14px; z-index: 4; }
+.stage__tools { position: absolute; top: 14px; right: 14px; z-index: 4; display: flex; gap: 8px; }
+.stage__tools .is-active-tool { background: var(--sky); color: #fff; }
 .stage__hint {
   position: absolute;
   top: 14px; left: 16px;

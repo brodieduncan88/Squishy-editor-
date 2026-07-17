@@ -24,6 +24,7 @@ export type IconName =
   | 'star'
   | 'menu'
   | 'pattern'
+  | 'cube'
   | 'wand';
 
 const P: Record<IconName, string> = {
@@ -53,6 +54,7 @@ const P: Record<IconName, string> = {
   star: 'M12 3l2.6 6.1 6.4.5-4.9 4.2 1.5 6.2L12 16.8 6.4 20.2l1.5-6.2L3 9.6l6.4-.5L12 3z',
   menu: 'M4 7h16M4 12h16M4 17h16',
   pattern: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
+  cube: 'M12 2l9 5v10l-9 5-9-5V7l9-5zM12 22V12M3 7l9 5 9-5',
   wand: 'M15 4l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2zM4 20l9-9M13 8l3 3',
 };
 
