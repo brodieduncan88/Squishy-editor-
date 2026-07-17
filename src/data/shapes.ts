@@ -38,14 +38,16 @@ function figure(
   hx: number, hy: number, hr: number,
   bx: number, by: number, brx: number, bry: number,
 ): string {
+  // Fuller shoulders + rounder top and bottom = a chunky, egg-like 3D volume
+  // with only a soft neck rather than a sharp pinch.
   return [
     `M ${hx} ${hy - hr}`,
-    `C ${hx + hr * 0.75} ${hy - hr} ${hx + hr} ${hy - hr * 0.62} ${hx + hr} ${hy}`,
-    `C ${hx + hr} ${hy + hr * 0.6} ${bx + brx} ${by - bry * 0.82} ${bx + brx} ${by}`,
-    `C ${bx + brx} ${by + bry * 0.62} ${bx + brx * 0.6} ${by + bry} ${bx} ${by + bry}`,
-    `C ${bx - brx * 0.6} ${by + bry} ${bx - brx} ${by + bry * 0.62} ${bx - brx} ${by}`,
-    `C ${bx - brx} ${by - bry * 0.82} ${hx - hr} ${hy + hr * 0.6} ${hx - hr} ${hy}`,
-    `C ${hx - hr} ${hy - hr * 0.62} ${hx - hr * 0.75} ${hy - hr} ${hx} ${hy - hr}`,
+    `C ${hx + hr * 0.82} ${hy - hr} ${hx + hr} ${hy - hr * 0.7} ${hx + hr} ${hy}`,
+    `C ${hx + hr} ${hy + hr * 0.78} ${bx + brx} ${by - bry * 0.99} ${bx + brx} ${by}`,
+    `C ${bx + brx} ${by + bry * 0.7} ${bx + brx * 0.66} ${by + bry} ${bx} ${by + bry}`,
+    `C ${bx - brx * 0.66} ${by + bry} ${bx - brx} ${by + bry * 0.7} ${bx - brx} ${by}`,
+    `C ${bx - brx} ${by - bry * 0.99} ${hx - hr} ${hy + hr * 0.78} ${hx - hr} ${hy}`,
+    `C ${hx - hr} ${hy - hr * 0.7} ${hx - hr * 0.82} ${hy - hr} ${hx} ${hy - hr}`,
     'Z',
   ].join(' ');
 }

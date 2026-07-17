@@ -180,26 +180,38 @@ function patternDefs(id: string, state: EditorState): string {
       <stop offset="100%" stop-color="#8FB8FF"/>
     </linearGradient>`);
 
-  // Translucent gel body — bright semi-transparent core deepening to a richer,
-  // more saturated edge. This is what reads as glossy glitter-resin.
-  const gelCore = shade(base, 0.5);
-  const gelEdge = shade(base, -0.12);
-  defs.push(`<radialGradient id="${id}-jelly" cx="43%" cy="33%" r="78%">
-      <stop offset="0%" stop-color="${gelCore}" stop-opacity="0.92"/>
-      <stop offset="42%" stop-color="${base}" stop-opacity="0.9"/>
-      <stop offset="82%" stop-color="${base}" stop-opacity="0.97"/>
+  // Translucent gel body shaded as a sphere: bright lit core (upper-left)
+  // falling to a much darker, richer edge — this is what reads as 3D volume.
+  const gelCore = shade(base, 0.6);
+  const gelEdge = shade(base, -0.34);
+  defs.push(`<radialGradient id="${id}-jelly" cx="39%" cy="30%" r="82%">
+      <stop offset="0%" stop-color="${gelCore}" stop-opacity="0.95"/>
+      <stop offset="34%" stop-color="${base}" stop-opacity="0.92"/>
+      <stop offset="74%" stop-color="${base}" stop-opacity="0.98"/>
       <stop offset="100%" stop-color="${gelEdge}" stop-opacity="1"/>
     </radialGradient>`);
-  // Inner gel glow near the top — the deep, lit-from-within look.
-  defs.push(`<radialGradient id="${id}-core" cx="45%" cy="30%" r="55%">
-      <stop offset="0%" stop-color="${shade(base, 0.75)}" stop-opacity="0.85"/>
+  // Inner gel glow near the top-left — the deep, lit-from-within highlight.
+  defs.push(`<radialGradient id="${id}-core" cx="40%" cy="27%" r="52%">
+      <stop offset="0%" stop-color="${shade(base, 0.82)}" stop-opacity="0.92"/>
       <stop offset="100%" stop-color="${base}" stop-opacity="0"/>
+    </radialGradient>`);
+  // Directional core / form shadow — a crescent on the lower-right where the
+  // body turns away from the light. The single strongest cue for roundness.
+  defs.push(`<radialGradient id="${id}-cshadow" cx="76%" cy="80%" r="70%">
+      <stop offset="0%" stop-color="${shade(base, -0.55)}" stop-opacity="0.5"/>
+      <stop offset="42%" stop-color="${shade(base, -0.42)}" stop-opacity="0.28"/>
+      <stop offset="72%" stop-color="${shade(base, -0.4)}" stop-opacity="0"/>
+    </radialGradient>`);
+  // Bounce / reflected light hugging the very bottom edge.
+  defs.push(`<radialGradient id="${id}-bounce" cx="50%" cy="94%" r="46%">
+      <stop offset="0%" stop-color="${shade(base, 0.5)}" stop-opacity="0.5"/>
+      <stop offset="70%" stop-color="${base}" stop-opacity="0"/>
     </radialGradient>`);
 
   // Ambient occlusion — grounds the base with soft shading toward the bottom.
   defs.push(`<linearGradient id="${id}-ao" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="45%" stop-color="#1F2850" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#141a38" stop-opacity="0.22"/>
+      <stop offset="52%" stop-color="#1F2850" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#141a38" stop-opacity="0.14"/>
     </linearGradient>`);
   // Rim light — a bright sliver along the very top edge.
   defs.push(`<linearGradient id="${id}-rim" x1="0" y1="0" x2="0" y2="1">
@@ -334,6 +346,12 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     .join('');
 
   // Volume shading, all clipped to the silhouette.
+  const formShade = glassy
+    ? `<g clip-path="url(#${clipId})">` +
+        `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-cshadow)"/>` +
+        `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-bounce)"/>` +
+      `</g>`
+    : '';
   const ao = `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-ao)"/></g>`;
   const rim = `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-rim)"/></g>`;
   const gloss =
@@ -364,6 +382,7 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     ${overlay}
     ${toneDetails}
     ${resin}
+    ${formShade}
     ${ao}
     ${rim}
     ${gloss}
