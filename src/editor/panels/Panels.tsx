@@ -4,7 +4,7 @@ import Chip from '../../ui/Chip';
 import SquishyPreview from '../../squishy/SquishyPreview';
 import { PanelHeader, OptionGrid, GroupLabel } from './PanelBits';
 import type { EditorApi } from '../../state/useEditorHistory';
-import { preset } from '../../lib/presets';
+import { preset, SIGNATURE } from '../../lib/presets';
 import {
   SHAPES,
   COLOURS,
@@ -34,7 +34,7 @@ export function SquishySelector({ api }: { api: EditorApi }) {
           >
             <div className="tile__squishy">
               <SquishyPreview
-                state={preset({ ...api.state, squishyType: s.id })}
+                state={SIGNATURE[s.id] ?? preset({ squishyType: s.id })}
                 size={68}
                 shadow={false}
               />

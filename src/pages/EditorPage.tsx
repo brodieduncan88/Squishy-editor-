@@ -78,6 +78,13 @@ export default function EditorPage() {
             title={activeDef.label}
             onClose={() => setSheetOpen(false)}
           >
+            <div className="sheet__tabs">
+              <CategoryNavigation
+                active={active}
+                onSelect={(id) => setActive(id)}
+                variant="tabs"
+              />
+            </div>
             <OptionPanel category={active} api={api} />
           </BottomSheet>
         </div>

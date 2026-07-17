@@ -70,3 +70,12 @@
   margin-bottom: 12px;
 }
 .sheet__title { font-size: 1.2rem; }
+/* Category strip inside the sheet so you can switch sections without closing. */
+.sheet__tabs {
+  margin: 0 -18px 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(31, 40, 80, 0.08);
+  position: sticky;
+  top: 0;
+}
+.sheet__tabs .cat-nav--tabs { padding: 2px 14px; }

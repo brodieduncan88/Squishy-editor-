@@ -24,6 +24,22 @@ export const HERO_SQUISHIES: EditorState[] = [
   preset({ squishyType: 'icecream', primaryColour: 'pastel-sky', skin: 'stars', face: 'happy', accessories: ['stickers'], name: 'Scoop' }),
 ];
 
+/* Signature look for each character — used in the editor's "Pick your squishy"
+   tiles so the roster looks vibrant and distinct instead of ten copies of the
+   current design. */
+export const SIGNATURE: Record<string, EditorState> = {
+  bear: preset({ squishyType: 'bear', primaryColour: 'pastel-pink', skin: 'hearts', face: 'happy', accessories: ['bow'] }),
+  cat: preset({ squishyType: 'cat', primaryColour: 'bright-orange', skin: 'tiger', face: 'mischief' }),
+  dog: preset({ squishyType: 'dog', primaryColour: 'pastel-cream', skin: 'cow', face: 'excited', accessories: ['collar'] }),
+  duck: preset({ squishyType: 'duck', primaryColour: 'bright-yellow', finish: 'solid', skin: 'solid', face: 'silly' }),
+  axolotl: preset({ squishyType: 'axolotl', primaryColour: 'pastel-pink', skin: 'glitter', face: 'happy' }),
+  unicorn: preset({ squishyType: 'unicorn', primaryColour: 'pastel-lav', skin: 'rainbow', face: 'excited', accessories: ['crown'] }),
+  icecream: preset({ squishyType: 'icecream', primaryColour: 'pastel-mint', skin: 'glitter', face: 'happy' }),
+  donut: preset({ squishyType: 'donut', primaryColour: 'bright-purple', skin: 'stars', face: 'excited' }),
+  frog: preset({ squishyType: 'frog', primaryColour: 'bright-green', finish: 'solid', skin: 'solid', face: 'silly' }),
+  blob: preset({ squishyType: 'blob', primaryColour: 'bright-blue', skin: 'galaxy', face: 'mischief' }),
+};
+
 export const GALLERY_SQUISHIES: Record<string, EditorState[]> = {
   Animals: [
     preset({ squishyType: 'bear', primaryColour: 'pastel-peach', skin: 'solid', face: 'happy', accessories: ['bow'] }),
