@@ -47,10 +47,10 @@ export const PERSONALITIES: Personality[] = [
 
 /* Home design packs — quick-start looks that seed the editor. */
 export const DESIGN_PACKS: DesignPack[] = [
-  { id: 'pastel-dream', name: 'Pastel Dream', blurb: 'Soft & dreamy', colours: ['pastel-lav', 'pastel-pink'], skin: 'clouds' },
-  { id: 'wild-animal', name: 'Wild Animal', blurb: 'Roar!', colours: ['pastel-lemon', 'bright-orange'], skin: 'tiger' },
-  { id: 'galaxy-glitter', name: 'Galaxy Glitter', blurb: 'Out of this world', colours: ['bright-purple', 'bright-blue'], skin: 'galaxy' },
-  { id: 'golden-glow', name: 'Golden Glow', blurb: 'Shiny & royal', colours: ['metal-gold', 'pastel-cream'], skin: 'gold' },
-  { id: 'rainbow-pop', name: 'Rainbow Pop', blurb: 'All the colours', colours: ['bright-pink', 'bright-yellow'], skin: 'rainbow' },
-  { id: 'sweet-treats', name: 'Sweet Treats', blurb: 'Yummy!', colours: ['pastel-pink', 'pastel-lemon'], skin: 'hearts' },
+  { id: 'pastel-dream', name: 'Pastel Dream', blurb: 'Soft pastel tones', colours: ['pastel-lav', 'pastel-pink'], skin: 'clouds' },
+  { id: 'wild-animal', name: 'Wild Animal', blurb: 'Bold animal prints', colours: ['pastel-lemon', 'bright-orange'], skin: 'tiger' },
+  { id: 'galaxy-glitter', name: 'Galaxy Glitter', blurb: 'Cosmic sparkle', colours: ['bright-purple', 'bright-blue'], skin: 'galaxy' },
+  { id: 'golden-glow', name: 'Golden Glow', blurb: 'Metallic shine', colours: ['metal-gold', 'pastel-cream'], skin: 'gold' },
+  { id: 'rainbow-pop', name: 'Rainbow Pop', blurb: 'Full spectrum', colours: ['bright-pink', 'bright-yellow'], skin: 'rainbow' },
+  { id: 'sweet-treats', name: 'Sweet Treats', blurb: 'Candy colours', colours: ['pastel-pink', 'pastel-lemon'], skin: 'hearts' },
 ];

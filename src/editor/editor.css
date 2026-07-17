@@ -121,8 +121,8 @@
   position: relative;
   height: 100%;
   border-radius: var(--r-xl);
-  background: radial-gradient(120% 100% at 50% 8%, #FFFFFF 0%, #D7EEFD 46%, #B9E2FB 100%);
-  box-shadow: var(--sh-md), inset 0 2px 8px rgba(255,255,255,0.7);
+  background: radial-gradient(110% 92% at 50% 10%, #3b4a92 0%, #29316d 46%, #1b2150 100%);
+  box-shadow: var(--sh-md), inset 0 1px 0 rgba(255,255,255,0.14);
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -130,10 +130,10 @@
 }
 .stage__glow {
   position: absolute;
-  width: 62%; aspect-ratio: 1;
+  width: 70%; aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.85), transparent 65%);
-  top: 12%;
+  background: radial-gradient(circle, rgba(160,190,255,0.5), transparent 62%);
+  top: 8%;
 }
 .stage__squishy { position: relative; z-index: 2; transition: transform var(--dur) var(--ease-squish); }
 .stage__nameplate {
@@ -156,8 +156,9 @@
   z-index: 3;
   font-family: var(--font-head);
   font-weight: 600;
-  color: var(--navy-soft);
-  background: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(4px);
   padding: 6px 14px;
   border-radius: var(--r-pill);
   font-size: 0.85rem;

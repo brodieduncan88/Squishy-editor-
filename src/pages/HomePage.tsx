@@ -14,7 +14,7 @@ import {
 import '../home/home.css';
 
 const MARQUEE_WORDS = [
-  'Pick', 'Customise', 'Wrap', 'Share', 'Squish', 'Play', 'Gift', 'Create',
+  'Design', 'Customise', 'Wrap', 'Share', 'Squish', 'Collect', 'Gift', 'Create',
 ];
 
 export default function HomePage() {

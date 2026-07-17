@@ -236,20 +236,34 @@
 /* ---------- generic sections ---------- */
 .section { padding: clamp(48px, 8vw, 96px) 0; }
 .section--tint { background: linear-gradient(180deg, #EAF6FE, #DCF0FC); }
-.section-head { text-align: center; max-width: 620px; margin: 0 auto clamp(28px, 4vw, 46px); }
+.section-head { text-align: center; max-width: 640px; margin: 0 auto clamp(30px, 4vw, 52px); }
 .section-head__kicker {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--font-head);
   font-weight: 600;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
   color: var(--sky-deep);
-  background: #fff;
-  padding: 6px 16px;
-  border-radius: var(--r-pill);
-  box-shadow: var(--sh-sm);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
-.section-head__title { font-size: clamp(1.9rem, 4vw, 2.8rem); color: var(--navy); }
-.section-head__sub { color: var(--navy-soft); font-size: 1.1rem; margin-top: 10px; }
+.section-head__kicker::before {
+  content: '';
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.6;
+}
+.section-head__title {
+  font-size: clamp(2.1rem, 4.4vw, 3.2rem);
+  color: var(--navy);
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+.section-head__sub { color: var(--navy-soft); font-size: 1.12rem; margin-top: 12px; line-height: 1.5; }
 
 /* ---------- How it works ---------- */
 .how-grid {
@@ -330,7 +344,7 @@
   align-items: center;
   gap: 8px;
   text-align: left;
-  border: none;
+  border: 1px solid var(--card-line);
   border-radius: var(--r-lg);
   background: var(--white);
   box-shadow: var(--sh-md);
@@ -360,16 +374,21 @@
 
 /* ---------- gift band ---------- */
 .section--gift {
-  background: linear-gradient(180deg, #FFF3DC, #FFE8C4);
+  background: radial-gradient(120% 120% at 20% 0%, #2c2f70 0%, #1d2350 55%, #171b3e 100%);
+  position: relative;
+  overflow: hidden;
 }
+.section--gift .pill { background: rgba(255,255,255,0.12); color: #fff; }
 .gift-band {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 40px;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
-.gift-band__copy h2 { font-size: clamp(2rem, 4vw, 2.8rem); color: var(--navy); margin: 14px 0 12px; }
-.gift-band__copy p { color: var(--navy-soft); font-size: 1.15rem; max-width: 44ch; margin-bottom: 24px; line-height: 1.5; }
+.gift-band__copy h2 { font-size: clamp(2.1rem, 4.2vw, 3rem); color: #fff; margin: 16px 0 14px; letter-spacing: -0.02em; }
+.gift-band__copy p { color: rgba(255,255,255,0.82); font-size: 1.16rem; max-width: 44ch; margin-bottom: 26px; line-height: 1.55; }
 .gift-band__art { display: grid; place-items: center; }
 
 .giftbox-open { position: relative; width: 280px; height: 280px; }
@@ -413,6 +432,7 @@
 .trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
 .trust-card {
   background: var(--white);
+  border: 1px solid var(--card-line);
   border-radius: var(--r-lg);
   padding: 30px 26px;
   box-shadow: var(--sh-md);

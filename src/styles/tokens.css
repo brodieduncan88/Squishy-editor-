@@ -19,9 +19,15 @@
   --navy: #1F2850;
   --navy-soft: #667097;
 
+  /* --- Deep / premium surfaces --- */
+  --ink: #151A3A;
+  --ink-2: #222a54;
+  --ink-3: #2f386b;
+  --twilight: radial-gradient(130% 130% at 50% -8%, #2a2a6e 0%, #33449b 36%, #3e86dd 72%, #57b5f0 100%);
+
   /* --- Semantic surfaces --- */
   --bg: #DCF0FC;
-  --bg-hero: radial-gradient(140% 120% at 50% 0%, #8FD3F7 0%, #57B5F0 42%, #45AEEF 100%);
+  --bg-hero: var(--twilight);
   --card: var(--white);
   --card-line: rgba(31, 40, 80, 0.08);
 

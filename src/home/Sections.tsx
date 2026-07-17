@@ -12,10 +12,10 @@ import { sound } from '../audio/sound';
 
 /* ---------- How It Works ---------- */
 const STEPS: { icon: IconName; title: string; body: string; tint: string }[] = [
-  { icon: 'shapes', title: 'Pick', body: 'Choose your favourite squishy character to start.', tint: 'var(--sky-soft)' },
-  { icon: 'palette', title: 'Customise', body: 'Change colours, add patterns, faces and fun extras.', tint: '#FFD9F0' },
-  { icon: 'gift', title: 'Wrap', body: 'Pop it in a gift box with a bow and a message.', tint: '#D9F7E6' },
-  { icon: 'share', title: 'Share', body: 'Save a picture or send a private link to someone.', tint: '#FFF0C4' },
+  { icon: 'shapes', title: 'Pick', body: 'Choose a character to start your design.', tint: 'var(--sky-soft)' },
+  { icon: 'palette', title: 'Customise', body: 'Colour, pattern, face and accessorise it your way.', tint: '#FFD9F0' },
+  { icon: 'gift', title: 'Wrap', body: 'Box it up with wrapping, a ribbon and a note.', tint: '#D9F7E6' },
+  { icon: 'share', title: 'Share', body: 'Send a private link or save the artwork.', tint: '#FFF0C4' },
 ];
 
 export function HowItWorks() {
@@ -23,9 +23,9 @@ export function HowItWorks() {
     <section id="how" className="section">
       <div className="container">
         <SectionHead
-          kicker="So easy!"
-          title="How It Works"
-          sub="Four little steps from idea to gift."
+          kicker="The process"
+          title="How it works"
+          sub="Four steps from blank canvas to gift."
         />
         <div className="how-grid">
           {STEPS.map((s, i) => (
@@ -61,9 +61,9 @@ export function Gallery() {
     <section id="gallery" className="section section--tint">
       <div className="container">
         <SectionHead
-          kicker="Squishy ideas"
-          title="Meet the Squishies"
-          sub="Browse by kind, then make one your own."
+          kicker="The collection"
+          title="Meet the line-up"
+          sub="Browse the range, then make one your own."
         />
         <div className="chip-row" role="tablist" aria-label="Squishy categories">
           {CATEGORIES.map((c) => (
@@ -103,9 +103,9 @@ export function DesignPacksSection() {
     <section className="section">
       <div className="container">
         <SectionHead
-          kicker="Quick looks"
-          title="Design Packs"
-          sub="Tap a pack to start with a ready-made style."
+          kicker="Style packs"
+          title="Design packs"
+          sub="Tap a pack to start from a ready-made style."
         />
         <div className="packs-grid">
           {DESIGN_PACKS.map((p, i) => {
@@ -167,14 +167,14 @@ export function GiftSection() {
           </div>
         </div>
         <div className="gift-band__copy">
-          <span className="pill">🎁 Virtual presents</span>
-          <h2>Wrap it up as a gift</h2>
+          <span className="pill">🎁 Virtual gifting</span>
+          <h2>Send it as a gift</h2>
           <p>
-            Every squishy can become a virtual present. Add a box, a bow and a
-            little message, then send it to someone you love.
+            Turn any squishy into a virtual gift. Add a box, a ribbon and a
+            message, then send a private link — they unwrap it on their screen.
           </p>
           <Button variant="lemon" size="lg" icon="gift" onClick={() => nav('/editor')}>
-            Make a Gift
+            Make a gift
           </Button>
         </div>
       </div>
@@ -194,9 +194,9 @@ export function TrustSection() {
     <section className="section section--tint">
       <div className="container">
         <SectionHead
-          kicker="For grown-ups"
+          kicker="For parents"
           title="Safe by design"
-          sub="Built to be a calm, private, friendly place to play."
+          sub="A private, friendly space to create — no accounts, no strangers."
         />
         <div className="trust-grid">
           {TRUST.map((t, i) => (
@@ -221,7 +221,7 @@ export function Footer() {
       <div className="container site-footer__inner">
         <p className="site-footer__brand">✦ Squishy Studio</p>
         <p className="site-footer__note">
-          A gentle place to create and gift your own squishy toys.
+          Design, collect and gift your own squishies.
         </p>
       </div>
     </footer>

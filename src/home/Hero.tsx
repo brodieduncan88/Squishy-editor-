@@ -14,7 +14,7 @@ export default function Hero() {
       <div className="container hero__inner">
         <div className="hero__copy">
           <span className="hero__eyebrow">
-            <span className="hero__eyebrow-dot" /> A digital toy studio for kids
+            <span className="hero__eyebrow-dot" /> Design-your-own collectible squishies
           </span>
           <h1 className="hero__title">
             Create a squishy
@@ -45,7 +45,7 @@ export default function Hero() {
                 document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })
               }
             >
-              See Squishy Ideas
+              Explore the collection
             </Button>
           </div>
           <div className="hero__stats">
