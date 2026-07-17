@@ -91,6 +91,17 @@ function bubbleField(seed: number): string {
   return out.join('');
 }
 
+/* How each pattern blends into the gel + how strong it is. */
+const PATTERN_CFG: Record<string, { blend: string; opacity: number }> = {
+  tiger: { blend: 'multiply', opacity: 0.55 },
+  zebra: { blend: 'multiply', opacity: 0.6 },
+  leopard: { blend: 'multiply', opacity: 0.5 },
+  cow: { blend: 'multiply', opacity: 0.55 },
+  stars: { blend: 'screen', opacity: 0.75 },
+  hearts: { blend: 'screen', opacity: 0.7 },
+  clouds: { blend: 'screen', opacity: 0.62 },
+};
+
 /* ---------- pattern + texture defs ---------- */
 
 function patternDefs(id: string, state: EditorState): string {
@@ -102,39 +113,54 @@ function patternDefs(id: string, state: EditorState): string {
 
   const defs: string[] = [];
 
-  // Animal + motif patterns (drawn as an overlay, clipped to the body).
+  // Animal + motif patterns. Colours chosen so blend modes make them read as
+  // pigment IN the gel: dark markings multiply with the body's shading, light
+  // motifs screen over it. Organic, tapered art — not hard tiled lines.
+  const animalDark = shade(base, -0.36);
+  const motifLight = shade(base, 0.72);
+  const cloudLight = shade(base, 0.6);
   const patterns: Record<string, string> = {
-    tiger: `<pattern id="${id}-p" width="52" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(6)">
-        <path d="M14 0 q6 20 -2 40 q-4 12 4 20" stroke="${dark}" stroke-width="9" fill="none" stroke-linecap="round"/>
-        <path d="M40 -6 q6 22 -2 44" stroke="${dark}" stroke-width="7" fill="none" stroke-linecap="round"/>
+    tiger: `<pattern id="${id}-p" width="46" height="72" patternUnits="userSpaceOnUse" patternTransform="rotate(4)">
+        <path d="M13 -2 Q23 34 10 74 Q3 36 13 -2 Z" fill="${animalDark}"/>
+        <path d="M34 -8 Q42 30 30 66 Q24 30 34 -8 Z" fill="${animalDark}"/>
       </pattern>`,
-    zebra: `<pattern id="${id}-p" width="46" height="60" patternUnits="userSpaceOnUse" patternTransform="rotate(-10)">
-        <path d="M10 -4 q-10 30 4 64" stroke="${dark}" stroke-width="10" fill="none"/>
-        <path d="M34 -4 q-10 30 4 64" stroke="${dark}" stroke-width="6" fill="none"/>
+    zebra: `<pattern id="${id}-p" width="42" height="74" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)">
+        <path d="M12 -4 Q24 36 8 78 Q0 36 12 -4 Z" fill="${animalDark}"/>
+        <path d="M32 -4 Q41 36 27 78 Q20 36 32 -4 Z" fill="${animalDark}"/>
       </pattern>`,
-    leopard: `<pattern id="${id}-p" width="48" height="48" patternUnits="userSpaceOnUse">
-        <path d="M12 12 q10 -6 16 2 q4 10 -6 12 q-14 0 -10 -14 Z" fill="none" stroke="${dark}" stroke-width="5"/>
-        <circle cx="18" cy="18" r="3" fill="${dark}"/>
-        <path d="M36 34 q8 -4 12 2 q2 8 -6 8 q-10 0 -6 -10 Z" fill="none" stroke="${dark}" stroke-width="4"/>
+    leopard: `<pattern id="${id}-p" width="56" height="56" patternUnits="userSpaceOnUse">
+        <g fill="${animalDark}">
+          <ellipse cx="17" cy="8" rx="4" ry="3"/><ellipse cx="26" cy="12" rx="4" ry="3"/>
+          <ellipse cx="25" cy="23" rx="4" ry="3"/><ellipse cx="13" cy="22" rx="4" ry="3"/><ellipse cx="9" cy="13" rx="4" ry="3"/>
+          <ellipse cx="45" cy="35" rx="4" ry="3"/><ellipse cx="52" cy="41" rx="4" ry="3"/>
+          <ellipse cx="48" cy="50" rx="4" ry="3"/><ellipse cx="38" cy="46" rx="4" ry="3"/><ellipse cx="37" cy="37" rx="4" ry="3"/>
+        </g>
       </pattern>`,
-    cow: `<pattern id="${id}-p" width="80" height="80" patternUnits="userSpaceOnUse">
-        <path d="M12 10 q26 -6 30 14 q4 20 -20 18 q-24 -2 -18 -22 Z" fill="${dark}"/>
-        <path d="M54 46 q18 -4 20 12 q0 14 -16 12 q-14 -2 -12 -16 Z" fill="${dark}"/>
+    cow: `<pattern id="${id}-p" width="96" height="96" patternUnits="userSpaceOnUse">
+        <path d="M18 14 C46 2 58 24 49 42 C43 62 14 57 10 39 C7 25 8 20 18 14 Z" fill="${animalDark}"/>
+        <path d="M62 56 C84 50 86 70 73 80 C59 90 47 78 51 64 C54 56 54 58 62 56 Z" fill="${animalDark}"/>
       </pattern>`,
-    stars: `<pattern id="${id}-p" width="46" height="46" patternUnits="userSpaceOnUse">
-        <path d="M23 8 l4 9 l10 1 l-7 7 l2 10 l-9 -5 l-9 5 l2 -10 l-7 -7 l10 -1 Z" fill="${second}"/>
+    stars: `<pattern id="${id}-p" width="50" height="50" patternUnits="userSpaceOnUse">
+        <path d="M25 8 l4 10 l11 1 l-8 7 l3 11 l-10 -6 l-10 6 l3 -11 l-8 -7 l11 -1 Z" fill="${motifLight}"/>
       </pattern>`,
-    hearts: `<pattern id="${id}-p" width="40" height="40" patternUnits="userSpaceOnUse">
-        <path d="M20 30 C6 20 8 8 16 8 q4 0 4 5 q0 -5 4 -5 c8 0 10 12 -4 22 Z" fill="${second}"/>
+    hearts: `<pattern id="${id}-p" width="44" height="44" patternUnits="userSpaceOnUse">
+        <path d="M22 32 C6 21 9 8 17 8 q5 0 5 6 q0 -6 5 -6 c8 0 11 13 -5 24 Z" fill="${motifLight}"/>
       </pattern>`,
-    clouds: `<pattern id="${id}-p" width="72" height="56" patternUnits="userSpaceOnUse">
-        <g fill="${light}">
-          <circle cx="20" cy="30" r="10"/><circle cx="32" cy="26" r="13"/><circle cx="44" cy="30" r="10"/>
-          <rect x="20" y="30" width="24" height="10" rx="5"/>
+    clouds: `<pattern id="${id}-p" width="78" height="60" patternUnits="userSpaceOnUse">
+        <g fill="${cloudLight}">
+          <circle cx="22" cy="32" r="11"/><circle cx="35" cy="27" r="14"/><circle cx="48" cy="32" r="11"/>
+          <rect x="22" y="32" width="26" height="11" rx="5"/>
         </g>
       </pattern>`,
   };
-  if (skin?.kind === 'pattern' && patterns[state.skin]) defs.push(patterns[state.skin]);
+  if (skin?.kind === 'pattern' && patterns[state.skin]) {
+    defs.push(patterns[state.skin]);
+    // Soft blur + an edge-fade mask so markings wrap the form and don't
+    // hard-clip at the outline.
+    defs.push(`<filter id="${id}-soft" x="-15%" y="-15%" width="130%" height="130%"><feGaussianBlur stdDeviation="1.15"/></filter>`);
+    defs.push(`<radialGradient id="${id}-edgegrad" cx="50%" cy="46%" r="62%"><stop offset="0%" stop-color="#fff"/><stop offset="68%" stop-color="#fff"/><stop offset="100%" stop-color="#767676"/></radialGradient>`);
+    defs.push(`<mask id="${id}-edgemask"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-edgegrad)"/></mask>`);
+  }
 
   // Texture gradients that replace the body fill.
   defs.push(`<radialGradient id="${id}-gloss" cx="38%" cy="30%" r="72%">
@@ -301,7 +327,12 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     .join('')}</clipPath>`;
 
   if (skin?.kind === 'pattern') {
-    overlay = `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-p)"/></g>`;
+    const cfg = PATTERN_CFG[state.skin] ?? { blend: 'multiply', opacity: 0.5 };
+    overlay =
+      `<g clip-path="url(#${clipId})" mask="url(#${id}-edgemask)">` +
+      `<g filter="url(#${id}-soft)" opacity="${cfg.opacity}" style="mix-blend-mode:${cfg.blend}">` +
+      `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-p)"/>` +
+      `</g></g>`;
   } else if (skin?.overlay === 'glitter') {
     overlay = `<g clip-path="url(#${clipId})">${sparkleLayer('#ffffff', 3)}${sparkleLayer('#FFE667', 2)}</g>`;
   } else if (skin?.overlay === 'galaxy') {
