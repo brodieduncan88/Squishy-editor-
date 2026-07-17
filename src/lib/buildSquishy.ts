@@ -15,6 +15,82 @@ export interface BuildOpts {
   shadow?: boolean;
 }
 
+/* ---------- deterministic randomness for glitter ----------
+   Seeded so a given (shape + colour + skin) always renders the same speckle
+   field — stable across re-renders, varied across squishies. */
+function hashSeed(str: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function mulberry32(seed: number) {
+  let a = seed;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* A field of suspended glitter flecks + a few 4-point sparkles, clipped to the
+   body. Colours are a mix of white, a lightened body tint and iridescent
+   accents — the hallmark of glitter-resin toys. */
+function glitterField(seed: number, base: string): string {
+  const rnd = mulberry32(seed);
+  const tint = shade(base, 0.62);
+  const accents = ['#ffffff', tint, '#FFE9A8', '#BFD1FF', '#FFC4F0', '#B9F3DE'];
+  const flecks: string[] = [];
+  const COUNT = 46;
+  for (let i = 0; i < COUNT; i++) {
+    // sample within the body's rough disc (clip trims the rest)
+    const ang = rnd() * Math.PI * 2;
+    const rad = Math.sqrt(rnd()) * 96;
+    const x = 150 + Math.cos(ang) * rad;
+    const y = 158 + Math.sin(ang) * rad * 0.96;
+    const r = 0.7 + rnd() * 2.1;
+    const c = accents[Math.floor(rnd() * accents.length)];
+    const op = (0.35 + rnd() * 0.6).toFixed(2);
+    if (rnd() > 0.82) {
+      // a bright 4-point sparkle
+      const s = r + 2.4;
+      flecks.push(
+        `<path d="M${x} ${y - s} L${x + s * 0.28} ${y - s * 0.28} L${x + s} ${y} L${x + s * 0.28} ${y + s * 0.28} L${x} ${y + s} L${x - s * 0.28} ${y + s * 0.28} L${x - s} ${y} L${x - s * 0.28} ${y - s * 0.28} Z" fill="#ffffff" opacity="${op}"/>`,
+      );
+    } else {
+      flecks.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="${c}" opacity="${op}"/>`);
+    }
+  }
+  return flecks.join('');
+}
+
+/* A few translucent air bubbles suspended in the gel. */
+function bubbleField(seed: number): string {
+  const rnd = mulberry32(seed ^ 0x9e3779b9);
+  const out: string[] = [];
+  const spots: [number, number, number][] = [
+    [118, 120, 13],
+    [190, 150, 9],
+    [140, 200, 11],
+    [205, 205, 7],
+  ];
+  for (const [x, y, r] of spots) {
+    const jitter = (rnd() - 0.5) * 10;
+    out.push(
+      `<g>` +
+        `<circle cx="${x + jitter}" cy="${y}" r="${r}" fill="#ffffff" opacity="0.10"/>` +
+        `<circle cx="${x + jitter}" cy="${y}" r="${r}" fill="none" stroke="#ffffff" stroke-width="1.4" opacity="0.5"/>` +
+        `<circle cx="${x + jitter - r * 0.35}" cy="${y - r * 0.35}" r="${r * 0.28}" fill="#ffffff" opacity="0.85"/>` +
+      `</g>`,
+    );
+  }
+  return out.join('');
+}
+
 /* ---------- pattern + texture defs ---------- */
 
 function patternDefs(id: string, state: EditorState): string {
@@ -104,6 +180,22 @@ function patternDefs(id: string, state: EditorState): string {
       <stop offset="100%" stop-color="#8FB8FF"/>
     </linearGradient>`);
 
+  // Translucent gel body — bright semi-transparent core deepening to a richer,
+  // more saturated edge. This is what reads as glossy glitter-resin.
+  const gelCore = shade(base, 0.5);
+  const gelEdge = shade(base, -0.12);
+  defs.push(`<radialGradient id="${id}-jelly" cx="43%" cy="33%" r="78%">
+      <stop offset="0%" stop-color="${gelCore}" stop-opacity="0.92"/>
+      <stop offset="42%" stop-color="${base}" stop-opacity="0.9"/>
+      <stop offset="82%" stop-color="${base}" stop-opacity="0.97"/>
+      <stop offset="100%" stop-color="${gelEdge}" stop-opacity="1"/>
+    </radialGradient>`);
+  // Inner gel glow near the top — the deep, lit-from-within look.
+  defs.push(`<radialGradient id="${id}-core" cx="45%" cy="30%" r="55%">
+      <stop offset="0%" stop-color="${shade(base, 0.75)}" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="${base}" stop-opacity="0"/>
+    </radialGradient>`);
+
   // Ambient occlusion — grounds the base with soft shading toward the bottom.
   defs.push(`<linearGradient id="${id}-ao" x1="0" y1="0" x2="0" y2="1">
       <stop offset="45%" stop-color="#1F2850" stop-opacity="0"/>
@@ -124,13 +216,24 @@ function patternDefs(id: string, state: EditorState): string {
   return `<defs>${defs.join('')}</defs>`;
 }
 
+/** Metals read as reflective chrome, not glitter-gel — they skip the jelly look. */
+function isMetallicLook(state: EditorState): boolean {
+  const skin = SKIN_MAP[state.skin];
+  return (
+    !!COLOUR_MAP[state.primaryColour]?.metallic ||
+    skin?.overlay === 'gold' ||
+    skin?.overlay === 'silver'
+  );
+}
+
 /** Decide the main body fill for the given state. */
 function bodyFill(id: string, state: EditorState): string {
   const skin = SKIN_MAP[state.skin];
   if (skin?.overlay && skin.overlay !== 'glitter') return `url(#${id}-${skin.overlay})`;
   if (state.gradient) return `url(#${id}-usergrad)`;
   if (COLOUR_MAP[state.primaryColour]?.metallic) return `url(#${id}-metal)`;
-  return COLOUR_MAP[state.primaryColour]?.hex ?? '#F9B5DE';
+  // Default body is now translucent gel rather than a flat fill.
+  return `url(#${id}-jelly)`;
 }
 
 /* small deterministic sparkles for glitter/galaxy (no RNG at render time) */
@@ -154,14 +257,20 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
   const base = COLOUR_MAP[state.primaryColour]?.hex ?? '#F9B5DE';
   const skin = SKIN_MAP[state.skin];
   const fill = bodyFill(id, state);
-  const stroke = shade(base, -0.22);
+  const glassy = !isMetallicLook(state);
+  // Softer, tinted edge for gel; a crisper edge for metals.
+  const stroke = shade(base, glassy ? -0.14 : -0.22);
+  const strokeOp = glassy ? 0.5 : 1;
 
   const behind = (shape.behind ?? [])
-    .map((d) => `<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="3"/>`)
+    .map(
+      (d) =>
+        `<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-opacity="${strokeOp}" stroke-width="3"/>`,
+    )
     .join('');
 
   // Body (evenodd supports the donut hole).
-  const body = `<path d="${shape.body}" fill="${fill}" fill-rule="evenodd" stroke="${stroke}" stroke-width="3.5"/>`;
+  const body = `<path d="${shape.body}" fill="${fill}" fill-rule="evenodd" stroke="${stroke}" stroke-opacity="${strokeOp}" stroke-width="3.5"/>`;
 
   // Pattern / texture overlay clipped to the body silhouette.
   let overlay = '';
@@ -184,6 +293,17 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
       return `<path d="${d.path}" fill="${c}" opacity="0.9"/>`;
     })
     .join('');
+
+  // Glitter-resin finish: inner gel glow, suspended glitter + air bubbles.
+  // Metals stay clean/reflective and skip it.
+  const seed = hashSeed(state.squishyType + state.primaryColour + state.skin);
+  const resin = glassy
+    ? `<g clip-path="url(#${clipId})">` +
+        `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-core)"/>` +
+        glitterField(seed, base) +
+        bubbleField(seed) +
+      `</g>`
+    : '';
 
   // Face
   const f = shape.face;
@@ -209,10 +329,17 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
   const gloss =
     `<g clip-path="url(#${clipId})">` +
     `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-gloss)"/>` +
-    // secondary sharp specular dot
-    `<ellipse cx="112" cy="104" rx="16" ry="22" fill="#ffffff" opacity="0.65" transform="rotate(-24 112 104)"/>` +
-    `<circle cx="180" cy="120" r="6" fill="#ffffff" opacity="0.55"/>` +
+    // big soft wet highlight + a crescent reflection
+    `<ellipse cx="112" cy="104" rx="30" ry="40" fill="#ffffff" opacity="0.55" transform="rotate(-24 112 104)"/>` +
+    `<path d="M78 128 Q92 82 150 74" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity="0.5"/>` +
+    // small sharp speculars
+    `<circle cx="180" cy="120" r="6" fill="#ffffff" opacity="0.7"/>` +
+    `<circle cx="120" cy="98" r="10" fill="#ffffff" opacity="0.85"/>` +
     `</g>`;
+  // A faint glassy edge that catches the light all the way round.
+  const glassEdge = glassy
+    ? `<path d="${shape.body}" fill="none" fill-rule="evenodd" stroke="#ffffff" stroke-width="2" opacity="0.35"/>`
+    : '';
 
   const shadow = opts.shadow
     ? `<ellipse cx="150" cy="268" rx="98" ry="24" fill="url(#${id}-contact)" class="sq-shadow"/>`
@@ -226,9 +353,11 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     ${body}
     ${overlay}
     ${details}
+    ${resin}
     ${ao}
     ${rim}
     ${gloss}
+    ${glassEdge}
     ${face}
     ${accessories}
   </svg>`;
