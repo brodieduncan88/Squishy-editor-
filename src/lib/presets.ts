@@ -17,7 +17,7 @@ export function preset(partial: Partial<EditorState>): EditorState {
 
 /* A few pre-made squishies used on the homepage. */
 export const HERO_SQUISHIES: EditorState[] = [
-  preset({ squishyType: 'bear', primaryColour: 'pastel-pink', skin: 'hearts', face: 'lovestruck', accessories: ['bow', 'fx-sparkle'], name: 'Rosie' }),
+  preset({ squishyType: 'bear', primaryColour: 'pastel-pink', skin: 'hearts', face: 'happy', accessories: ['bow', 'fx-sparkle'], name: 'Rosie' }),
   preset({ squishyType: 'axolotl', primaryColour: 'pastel-lav', skin: 'glitter', face: 'starstruck', accessories: ['crown'], name: 'Sparkle' }),
   preset({ squishyType: 'cat', primaryColour: 'bright-orange', skin: 'tiger', face: 'cool', accessories: ['headphones'], name: 'Tygo' }),
   preset({ squishyType: 'unicorn', primaryColour: 'pastel-mint', skin: 'holo', face: 'dreamy', accessories: ['flower'], name: 'Dazzle' }),
@@ -28,7 +28,7 @@ export const HERO_SQUISHIES: EditorState[] = [
    tiles so the roster looks vibrant and distinct instead of ten copies of the
    current design. */
 export const SIGNATURE: Record<string, EditorState> = {
-  bear: preset({ squishyType: 'bear', primaryColour: 'pastel-pink', skin: 'hearts', face: 'lovestruck', accessories: ['bow'] }),
+  bear: preset({ squishyType: 'bear', primaryColour: 'pastel-pink', skin: 'hearts', face: 'happy', accessories: ['bow'] }),
   cat: preset({ squishyType: 'cat', primaryColour: 'bright-orange', skin: 'tiger', face: 'cool', accessories: ['headphones'] }),
   dog: preset({ squishyType: 'dog', primaryColour: 'pastel-cream', skin: 'cow', face: 'excited', accessories: ['scarf'] }),
   duck: preset({ squishyType: 'duck', primaryColour: 'bright-yellow', finish: 'solid', skin: 'solid', face: 'silly', accessories: ['beanie'] }),
