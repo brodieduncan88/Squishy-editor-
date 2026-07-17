@@ -190,12 +190,12 @@ function patternDefs(id: string, state: EditorState): string {
       <stop offset="74%" stop-color="${base}" stop-opacity="0.98"/>
       <stop offset="100%" stop-color="${gelEdge}" stop-opacity="1"/>
     </radialGradient>`);
-  // Opaque solid finish — the same spherical shading but fully opaque and no
-  // glitter, for a clean solid squishy.
-  defs.push(`<radialGradient id="${id}-solid" cx="39%" cy="30%" r="82%">
-      <stop offset="0%" stop-color="${shade(base, 0.42)}"/>
-      <stop offset="46%" stop-color="${base}"/>
-      <stop offset="100%" stop-color="${shade(base, -0.3)}"/>
+  // Opaque solid finish — spherical shading but fully opaque, colour-true, no
+  // glitter. Keep the centre close to the real colour so it never washes out.
+  defs.push(`<radialGradient id="${id}-solid" cx="39%" cy="31%" r="84%">
+      <stop offset="0%" stop-color="${shade(base, 0.3)}"/>
+      <stop offset="40%" stop-color="${base}"/>
+      <stop offset="100%" stop-color="${shade(base, -0.36)}"/>
     </radialGradient>`);
   // Inner gel glow near the top-left — the deep, lit-from-within highlight.
   defs.push(`<radialGradient id="${id}-core" cx="40%" cy="27%" r="52%">
@@ -325,10 +325,10 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     )
     .join('');
 
-  // Inner top-left glow reads as lit volume on both solid and jelly.
-  // Suspended glitter + air bubbles are jelly-only.
+  // The lit-from-within glow is a translucency cue — jelly only, or a solid
+  // squishy washes out to pale and looks see-through. Glitter + bubbles too.
   const seed = hashSeed(state.squishyType + state.primaryColour + state.skin);
-  const coreGlow = shaded
+  const coreGlow = jelly
     ? `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-core)"/></g>`
     : '';
   const resin = jelly
@@ -362,13 +362,17 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     : '';
   const ao = `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-ao)"/></g>`;
   const rim = `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-rim)"/></g>`;
+  // The big soft highlight + crescent are wet-resin cues (jelly only); solids
+  // get a gentler sheen so the colour stays rich rather than washing out.
+  const wet = jelly
+    ? `<ellipse cx="112" cy="104" rx="30" ry="40" fill="#ffffff" opacity="0.55" transform="rotate(-24 112 104)"/>` +
+      `<path d="M78 128 Q92 82 150 74" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity="0.5"/>`
+    : '';
   const gloss =
-    `<g clip-path="url(#${clipId})">` +
+    `<g clip-path="url(#${clipId})" opacity="${jelly ? 1 : 0.6}">` +
     `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-gloss)"/>` +
-    // big soft wet highlight + a crescent reflection
-    `<ellipse cx="112" cy="104" rx="30" ry="40" fill="#ffffff" opacity="0.55" transform="rotate(-24 112 104)"/>` +
-    `<path d="M78 128 Q92 82 150 74" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity="0.5"/>` +
-    // small sharp speculars
+    wet +
+    // small sharp speculars keep it shiny on both finishes
     `<circle cx="180" cy="120" r="6" fill="#ffffff" opacity="0.7"/>` +
     `<circle cx="120" cy="98" r="10" fill="#ffffff" opacity="0.85"/>` +
     `</g>`;
