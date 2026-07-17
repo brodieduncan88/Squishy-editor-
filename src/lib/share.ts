@@ -84,20 +84,6 @@ export const SHARE_CHANNELS: ShareChannel[] = [
     href: (t, u) =>
       `mailto:?subject=${encodeURIComponent('A squishy gift for you! 🎁')}&body=${encodeURIComponent(`${t}\n\n${u}`)}`,
   },
-  {
-    id: 'facebook',
-    label: 'Facebook',
-    external: true,
-    href: (_t, u) =>
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(u)}`,
-  },
-  {
-    id: 'x',
-    label: 'X',
-    external: true,
-    href: (t, u) =>
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(u)}`,
-  },
 ];
 
 /** Native share sheet (mobile). Returns true if it was shown. */

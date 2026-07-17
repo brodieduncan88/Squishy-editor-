@@ -18,8 +18,11 @@
 /* channel grid */
 .share__channels {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+  max-width: 320px;
+  margin: 0 auto;
+  width: 100%;
 }
 .share-channel {
   display: flex;
@@ -85,6 +88,5 @@
 
 @media (max-width: 480px) {
   .share__actions { grid-template-columns: 1fr; }
-  .share__channels { grid-template-columns: repeat(5, 1fr); gap: 6px; }
-  .share-channel__icon { width: 46px; height: 46px; font-size: 1.2rem; }
+  .share-channel__icon { width: 48px; height: 48px; font-size: 1.2rem; }
 }

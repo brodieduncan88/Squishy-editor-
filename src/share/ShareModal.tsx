@@ -85,8 +85,8 @@ export default function ShareModal({ open, state, onClose }: Props) {
 
         <p className="share__hint">
           {canNative
-            ? 'Choose a contact, message app, email or social — they’ll get a link to open the gift.'
-            : 'Send the gift link by message, email or social:'}
+            ? 'Choose a contact, message app or email — they’ll get a link to open the gift.'
+            : 'Send the gift link by message or email:'}
         </p>
 
         <div className="share__channels">
@@ -146,10 +146,6 @@ function ChannelGlyph({ id }: { id: string }) {
       return <Icon name="tag" size={22} />;
     case 'whatsapp':
       return <span aria-hidden>💬</span>;
-    case 'facebook':
-      return <span aria-hidden>f</span>;
-    case 'x':
-      return <span aria-hidden>𝕏</span>;
     default:
       return <Icon name="share" size={22} />;
   }
