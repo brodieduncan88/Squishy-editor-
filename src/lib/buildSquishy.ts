@@ -162,6 +162,10 @@ function patternDefs(id: string, state: EditorState): string {
     defs.push(`<mask id="${id}-edgemask"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-edgegrad)"/></mask>`);
   }
 
+  // Soft blur for tone details (muzzles, bellies, paws) so they blend into
+  // the body like moulded colour instead of pasted flat shapes.
+  defs.push(`<filter id="${id}-tsoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1"/></filter>`);
+
   // Texture gradients that replace the body fill.
   defs.push(`<radialGradient id="${id}-gloss" cx="38%" cy="30%" r="72%">
       <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
@@ -341,13 +345,16 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
 
   // Tone details (muzzles, bellies) blend under the gel; solid coloured
   // features (beaks, horns, cherries) render on top so they stay vivid.
-  const toneDetails = (shape.details ?? [])
+  const toneShapes = (shape.details ?? [])
     .filter((d) => !d.fill)
     .map((d) => {
       const c = d.tone === 'dark' ? shade(base, -0.34) : shade(base, 0.5);
-      return `<path d="${d.path}" fill="${c}" opacity="0.9"/>`;
+      return `<path d="${d.path}" fill="${c}" opacity="0.85"/>`;
     })
     .join('');
+  const toneDetails = toneShapes
+    ? `<g clip-path="url(#${clipId})" filter="url(#${id}-tsoft)">${toneShapes}</g>`
+    : '';
   const featureDetails = (shape.details ?? [])
     .filter((d) => d.fill)
     .map(
@@ -368,20 +375,24 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
 
   // Face
   const f = shape.face;
-  const faceInner = renderFace(state.eyes, state.mouth, state.cheeks);
+  const faceInner = renderFace(state.eyes, state.mouth, state.cheeks, id);
   const face = `<g transform="translate(${f.x} ${f.y}) scale(${f.scale})">${faceInner}</g>`;
 
-  // Accessories (wings first so they can sit behind the silhouette edge).
-  const accSorted = [...state.accessories].sort((a) =>
-    ACCESSORY_MAP[a]?.slot === 'back' ? -1 : 1,
-  );
-  const accessories = accSorted
-    .map((aid) => {
-      const a = ACCESSORY_MAP[aid];
-      if (!a) return '';
-      const anchor = shape.anchors[a.slot] ?? { x: 150, y: 150 };
-      return a.render(anchor);
-    })
+  // Accessories: 'aura' items (capes, wings, magic effects) render behind the
+  // body; everything else renders on top after the face.
+  const renderAcc = (aid: string) => {
+    const a = ACCESSORY_MAP[aid];
+    if (!a) return '';
+    const anchor = shape.anchors[a.slot] ?? { x: 150, y: 150 };
+    return a.render(anchor, id);
+  };
+  const auras = state.accessories
+    .filter((aid) => ACCESSORY_MAP[aid]?.slot === 'aura')
+    .map(renderAcc)
+    .join('');
+  const accessories = state.accessories
+    .filter((aid) => ACCESSORY_MAP[aid] && ACCESSORY_MAP[aid].slot !== 'aura')
+    .map(renderAcc)
     .join('');
 
   // Volume shading, all clipped to the silhouette.
@@ -420,6 +431,7 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     ${patternDefs(id, state)}
     ${clip}
     ${shadow}
+    ${auras}
     ${behind}
     ${body}
     ${overlay}

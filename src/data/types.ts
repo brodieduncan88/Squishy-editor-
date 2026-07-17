@@ -80,15 +80,18 @@ export type AccessorySlot =
   | 'face'
   | 'neck'
   | 'back'
-  | 'sticker';
+  | 'sticker'
+  /** Rendered behind the body — capes, wings and magic effects. */
+  | 'aura';
 
 export interface Accessory {
   id: string;
   name: string;
   slot: AccessorySlot;
   emoji: string;
-  /** SVG markup positioned relative to the slot anchor. */
-  render: (anchor: AnchorPoint) => string;
+  /** SVG markup positioned relative to the slot anchor. `uid` namespaces any
+      inline gradient ids so multiple squishies can share a page. */
+  render: (anchor: AnchorPoint, uid: string) => string;
 }
 
 export interface GiftBox {

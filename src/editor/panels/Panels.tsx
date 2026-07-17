@@ -139,10 +139,23 @@ export function SkinSelector({ api }: { api: EditorApi }) {
           <SelectTile
             key={s.id}
             label={s.name}
-            emoji={s.emoji}
             selected={api.state.skin === s.id}
             onSelect={() => api.set({ skin: s.id })}
-          />
+          >
+            <div className="tile__squishy">
+              <SquishyPreview
+                state={preset({
+                  squishyType: 'blob',
+                  primaryColour: api.state.primaryColour,
+                  finish: api.state.finish,
+                  skin: s.id,
+                  face: api.state.face,
+                })}
+                size={64}
+                shadow={false}
+              />
+            </div>
+          </SelectTile>
         ))}
       </OptionGrid>
     </>
@@ -178,20 +191,37 @@ export function FaceSelector({ api }: { api: EditorApi }) {
 
 /* ---------- Extras ---------- */
 export function AccessorySelector({ api }: { api: EditorApi }) {
+  const wear = ACCESSORIES.filter((a) => a.slot !== 'aura');
+  const magic = ACCESSORIES.filter((a) => a.slot === 'aura');
+  const tile = (a: (typeof ACCESSORIES)[number]) => (
+    <SelectTile
+      key={a.id}
+      label={a.name}
+      selected={api.state.accessories.includes(a.id)}
+      onSelect={() => api.toggleAccessory(a.id)}
+    >
+      <div className="tile__squishy">
+        <SquishyPreview
+          state={preset({
+            squishyType: 'bear',
+            primaryColour: api.state.primaryColour,
+            finish: api.state.finish,
+            face: 'happy',
+            accessories: [a.id],
+          })}
+          size={64}
+          shadow={false}
+        />
+      </div>
+    </SelectTile>
+  );
   return (
     <>
       <PanelHeader title="Fun extras" hint="Add as many as you like — tap to remove." />
-      <OptionGrid cols={3}>
-        {ACCESSORIES.map((a) => (
-          <SelectTile
-            key={a.id}
-            label={a.name}
-            emoji={a.emoji}
-            selected={api.state.accessories.includes(a.id)}
-            onSelect={() => api.toggleAccessory(a.id)}
-          />
-        ))}
-      </OptionGrid>
+      <GroupLabel>Wear it</GroupLabel>
+      <OptionGrid cols={3}>{wear.map(tile)}</OptionGrid>
+      <GroupLabel>Magic effects</GroupLabel>
+      <OptionGrid cols={3}>{magic.map(tile)}</OptionGrid>
     </>
   );
 }

@@ -17,27 +17,27 @@ export function preset(partial: Partial<EditorState>): EditorState {
 
 /* A few pre-made squishies used on the homepage. */
 export const HERO_SQUISHIES: EditorState[] = [
-  preset({ squishyType: 'bear', primaryColour: 'pastel-pink', skin: 'hearts', face: 'happy', accessories: ['bow'], name: 'Rosie' }),
-  preset({ squishyType: 'axolotl', primaryColour: 'pastel-lav', skin: 'glitter', face: 'excited', accessories: ['crown'], name: 'Sparkle' }),
-  preset({ squishyType: 'cat', primaryColour: 'pastel-lemon', skin: 'tiger', face: 'mischief', accessories: ['glasses'], name: 'Tiger' }),
-  preset({ squishyType: 'unicorn', primaryColour: 'pastel-mint', skin: 'rainbow', face: 'silly', accessories: ['flower'], name: 'Dazzle' }),
-  preset({ squishyType: 'icecream', primaryColour: 'pastel-sky', skin: 'stars', face: 'happy', accessories: ['stickers'], name: 'Scoop' }),
+  preset({ squishyType: 'bear', primaryColour: 'pastel-pink', skin: 'hearts', face: 'lovestruck', accessories: ['bow', 'fx-sparkle'], name: 'Rosie' }),
+  preset({ squishyType: 'axolotl', primaryColour: 'pastel-lav', skin: 'glitter', face: 'starstruck', accessories: ['crown'], name: 'Sparkle' }),
+  preset({ squishyType: 'cat', primaryColour: 'bright-orange', skin: 'tiger', face: 'cool', accessories: ['headphones'], name: 'Tygo' }),
+  preset({ squishyType: 'unicorn', primaryColour: 'pastel-mint', skin: 'holo', face: 'dreamy', accessories: ['flower'], name: 'Dazzle' }),
+  preset({ squishyType: 'blob', primaryColour: 'bright-purple', skin: 'galaxy', face: 'kitty', accessories: ['fx-stars'], name: 'Nova' }),
 ];
 
 /* Signature look for each character — used in the editor's "Pick your squishy"
    tiles so the roster looks vibrant and distinct instead of ten copies of the
    current design. */
 export const SIGNATURE: Record<string, EditorState> = {
-  bear: preset({ squishyType: 'bear', primaryColour: 'pastel-pink', skin: 'hearts', face: 'happy', accessories: ['bow'] }),
-  cat: preset({ squishyType: 'cat', primaryColour: 'bright-orange', skin: 'tiger', face: 'mischief' }),
-  dog: preset({ squishyType: 'dog', primaryColour: 'pastel-cream', skin: 'cow', face: 'excited', accessories: ['collar'] }),
-  duck: preset({ squishyType: 'duck', primaryColour: 'bright-yellow', finish: 'solid', skin: 'solid', face: 'silly' }),
-  axolotl: preset({ squishyType: 'axolotl', primaryColour: 'pastel-pink', skin: 'glitter', face: 'happy' }),
-  unicorn: preset({ squishyType: 'unicorn', primaryColour: 'pastel-lav', skin: 'rainbow', face: 'excited', accessories: ['crown'] }),
-  icecream: preset({ squishyType: 'icecream', primaryColour: 'pastel-mint', skin: 'glitter', face: 'happy' }),
+  bear: preset({ squishyType: 'bear', primaryColour: 'pastel-pink', skin: 'hearts', face: 'lovestruck', accessories: ['bow'] }),
+  cat: preset({ squishyType: 'cat', primaryColour: 'bright-orange', skin: 'tiger', face: 'cool', accessories: ['headphones'] }),
+  dog: preset({ squishyType: 'dog', primaryColour: 'pastel-cream', skin: 'cow', face: 'excited', accessories: ['scarf'] }),
+  duck: preset({ squishyType: 'duck', primaryColour: 'bright-yellow', finish: 'solid', skin: 'solid', face: 'silly', accessories: ['beanie'] }),
+  axolotl: preset({ squishyType: 'axolotl', primaryColour: 'pastel-pink', skin: 'glitter', face: 'dreamy' }),
+  unicorn: preset({ squishyType: 'unicorn', primaryColour: 'pastel-lav', skin: 'rainbow', face: 'starstruck', accessories: ['crown'] }),
+  icecream: preset({ squishyType: 'icecream', primaryColour: 'pastel-mint', skin: 'glitter', face: 'kitty' }),
   donut: preset({ squishyType: 'donut', primaryColour: 'bright-purple', skin: 'stars', face: 'excited' }),
-  frog: preset({ squishyType: 'frog', primaryColour: 'bright-green', finish: 'solid', skin: 'solid', face: 'silly' }),
-  blob: preset({ squishyType: 'blob', primaryColour: 'bright-blue', skin: 'galaxy', face: 'mischief' }),
+  frog: preset({ squishyType: 'frog', primaryColour: 'bright-green', finish: 'solid', skin: 'solid', face: 'cool', accessories: ['sunglasses'] }),
+  blob: preset({ squishyType: 'blob', primaryColour: 'bright-blue', skin: 'galaxy', face: 'mischief', accessories: ['fx-sparkle'] }),
 };
 
 export const GALLERY_SQUISHIES: Record<string, EditorState[]> = {
