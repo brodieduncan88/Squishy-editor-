@@ -287,11 +287,21 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     overlay = `<g clip-path="url(#${clipId})">${sparkleLayer('#ffffff', 2.4)}</g>`;
   }
 
-  const details = (shape.details ?? [])
+  // Tone details (muzzles, bellies) blend under the gel; solid coloured
+  // features (beaks, horns, cherries) render on top so they stay vivid.
+  const toneDetails = (shape.details ?? [])
+    .filter((d) => !d.fill)
     .map((d) => {
       const c = d.tone === 'dark' ? shade(base, -0.34) : shade(base, 0.5);
       return `<path d="${d.path}" fill="${c}" opacity="0.9"/>`;
     })
+    .join('');
+  const featureDetails = (shape.details ?? [])
+    .filter((d) => d.fill)
+    .map(
+      (d) =>
+        `<path d="${d.path}" fill="${d.fill}" stroke="${shade(d.fill!, -0.18)}" stroke-width="1.5" stroke-linejoin="round"/>`,
+    )
     .join('');
 
   // Glitter-resin finish: inner gel glow, suspended glitter + air bubbles.
@@ -352,12 +362,13 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     ${behind}
     ${body}
     ${overlay}
-    ${details}
+    ${toneDetails}
     ${resin}
     ${ao}
     ${rim}
     ${gloss}
     ${glassEdge}
+    ${featureDetails}
     ${face}
     ${accessories}
   </svg>`;

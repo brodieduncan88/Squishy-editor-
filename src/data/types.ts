@@ -25,8 +25,10 @@ export interface SquishyShape {
   body: string;
   /** Optional extra shapes drawn behind body (ears, fins…) that inherit body colour. */
   behind?: string[];
-  /** Optional extra shapes drawn above the pattern but below the face. */
-  details?: { path: string; tone?: 'light' | 'dark' }[];
+  /** Optional extra shapes drawn above the pattern but below the face.
+      `tone` derives a colour from the body; `fill` sets an explicit colour
+      (beaks, horns, cherries) that ignores the body colour. */
+  details?: { path: string; tone?: 'light' | 'dark'; fill?: string }[];
   /** Where the face sits and how big. */
   face: { x: number; y: number; scale: number };
   /** Slot anchors for accessories. */
