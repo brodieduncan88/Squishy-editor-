@@ -19,7 +19,7 @@ function fromBase64Url(b64: string): string {
 const KEYS: (keyof EditorState)[] = [
   'squishyType', 'primaryColour', 'secondaryColour', 'gradient', 'skin',
   'face', 'eyes', 'mouth', 'cheeks', 'accessories', 'name', 'personality',
-  'box', 'wrapping', 'ribbon', 'recipient', 'giftMessage', 'finish',
+  'box', 'wrapping', 'ribbon', 'recipient', 'giftMessage', 'finish', 'sender',
 ];
 
 export function encodeState(state: EditorState): string {
@@ -46,4 +46,71 @@ export function shareUrl(state: EditorState): string {
   // A random tag makes the link feel private / unguessable in the address bar.
   const tag = Math.floor(Math.random() * 1e6).toString(36);
   return `${origin}/s/${encodeState(state)}~${tag}`;
+}
+
+/** Friendly message that travels with the link. */
+export function shareText(state: EditorState): string {
+  const from = state.sender?.trim();
+  const named = state.name ? ` called ${state.name}` : '';
+  const who = from ? `${from} made you` : 'You have';
+  return `🎁 ${who} a squishy gift${named} on Squishy Studio! Tap to open it:`;
+}
+
+export interface ShareChannel {
+  id: string;
+  label: string;
+  /** builds the deep link/href for this channel */
+  href: (text: string, url: string) => string;
+  external?: boolean;
+}
+
+/* Channels that hand off to the device's own apps — no backend needed.
+   The user picks the contact and hits send. */
+export const SHARE_CHANNELS: ShareChannel[] = [
+  {
+    id: 'sms',
+    label: 'Message',
+    href: (t, u) => `sms:?&body=${encodeURIComponent(`${t} ${u}`)}`,
+  },
+  {
+    id: 'whatsapp',
+    label: 'WhatsApp',
+    external: true,
+    href: (t, u) => `https://wa.me/?text=${encodeURIComponent(`${t} ${u}`)}`,
+  },
+  {
+    id: 'email',
+    label: 'Email',
+    href: (t, u) =>
+      `mailto:?subject=${encodeURIComponent('A squishy gift for you! 🎁')}&body=${encodeURIComponent(`${t}\n\n${u}`)}`,
+  },
+  {
+    id: 'facebook',
+    label: 'Facebook',
+    external: true,
+    href: (_t, u) =>
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(u)}`,
+  },
+  {
+    id: 'x',
+    label: 'X',
+    external: true,
+    href: (t, u) =>
+      `https://twitter.com/intent/tweet?text=${encodeURIComponent(t)}&url=${encodeURIComponent(u)}`,
+  },
+];
+
+/** Native share sheet (mobile). Returns true if it was shown. */
+export async function nativeShare(state: EditorState, url: string): Promise<boolean> {
+  if (typeof navigator === 'undefined' || !navigator.share) return false;
+  try {
+    await navigator.share({
+      title: 'A squishy gift for you! 🎁',
+      text: shareText(state),
+      url,
+    });
+    return true;
+  } catch {
+    return false; // user cancelled or unsupported
+  }
 }

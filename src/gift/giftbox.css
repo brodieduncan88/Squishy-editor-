@@ -1,0 +1,82 @@
+/* Shared gift visuals — used by the editor's GiftReveal and the recipient
+   SharedPage. */
+
+.gift-reveal { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 10px 0; }
+.gift-reveal__tag {
+  background: #fff;
+  padding: 8px 18px;
+  border-radius: var(--r-pill);
+  box-shadow: var(--sh-sm);
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.wrapped-box { position: relative; width: 200px; height: 190px; animation: wobble 2.4s ease-in-out infinite; }
+.wrapped-box__body {
+  position: absolute;
+  bottom: 0; left: 10px;
+  width: 180px; height: 130px;
+  border-radius: 14px;
+  box-shadow: var(--sh-lg), var(--sh-inset);
+}
+.wrapped-box__lid {
+  position: absolute;
+  top: 22px; left: 0;
+  width: 200px; height: 46px;
+  border-radius: 12px;
+  box-shadow: var(--sh-md);
+}
+.wrapped-box__ribbon-v {
+  position: absolute;
+  bottom: 0; left: 88px;
+  width: 24px; height: 176px;
+  background: var(--ribbon);
+  z-index: 2;
+  border-radius: 4px;
+}
+.wrapped-box__ribbon-h {
+  position: absolute;
+  top: 30px; left: 0;
+  width: 200px; height: 26px;
+  background: var(--ribbon);
+  z-index: 2;
+  border-radius: 4px;
+}
+.wrapped-box__bow {
+  position: absolute;
+  top: 2px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-size: 2.6rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wrapped-box { animation: none; }
+}
+
+.gift-open { display: flex; flex-direction: column; gap: 18px; animation: rise-out var(--dur-slow) var(--ease-squish); }
+.gift-open__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+  background: radial-gradient(120% 100% at 50% 10%, #fff, #DCF0FC);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-md);
+}
+.gift-open__name {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--navy);
+  background: var(--lemon);
+  padding: 6px 20px;
+  border-radius: var(--r-pill);
+}
+.gift-open__msg { color: var(--navy); font-weight: 700; font-style: italic; text-align: center; max-width: 34ch; }
+.gift-open__to { color: var(--pink); font-weight: 800; }
+.gift-open__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+@media (max-width: 480px) {
+  .gift-open__actions { grid-template-columns: 1fr; }
+}

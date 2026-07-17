@@ -21,6 +21,7 @@ export interface EditorState {
   wrapping: string;
   ribbon: string;
   recipient: string;
+  sender: string;
   giftMessage: string;
 }
 
@@ -42,6 +43,7 @@ export const DEFAULT_STATE: EditorState = {
   wrapping: 'wrap-dots',
   ribbon: 'ribbon-gold',
   recipient: '',
+  sender: '',
   giftMessage: '',
 };
 

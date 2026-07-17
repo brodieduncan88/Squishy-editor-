@@ -286,6 +286,18 @@ export function GiftWrapper({ api }: { api: EditorApi }) {
       </label>
 
       <label className="text-field">
+        <span className="text-field__label">From (your name)</span>
+        <input
+          className="text-field__input"
+          type="text"
+          maxLength={24}
+          placeholder="Your name"
+          value={s.sender}
+          onChange={(e) => api.set({ sender: e.target.value })}
+        />
+      </label>
+
+      <label className="text-field">
         <span className="text-field__label">Gift message</span>
         <textarea
           className="text-field__input text-field__area"

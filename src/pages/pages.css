@@ -81,6 +81,8 @@
   animation: pop-in var(--dur-slow) var(--ease-squish);
 }
 .shared__to { font-size: clamp(1.6rem, 4vw, 2.2rem); color: var(--navy); margin: 14px 0 4px; }
+.shared__from { color: var(--navy-soft); font-weight: 700; margin-bottom: 6px; }
+.shared__box { display: grid; place-items: center; padding: 18px 0 26px; }
 .shared__squishy { display: grid; place-items: center; margin: 10px 0; }
 .shared__name {
   font-family: var(--font-head);

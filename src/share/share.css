@@ -1,0 +1,90 @@
+.share { display: flex; flex-direction: column; gap: 15px; }
+.share__preview {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  padding: 22px 18px 18px;
+  background: radial-gradient(120% 100% at 50% 10%, #fff, #DCF0FC);
+  border-radius: var(--r-lg);
+}
+.share__summary {
+  font-family: var(--font-head);
+  font-weight: 600;
+  color: var(--navy);
+}
+.share__summary strong { color: var(--sky-deep); }
+.share__hint { color: var(--navy-soft); font-weight: 700; font-size: 0.92rem; text-align: center; }
+
+/* channel grid */
+.share__channels {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.share-channel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border-radius: var(--r-md);
+  transition: transform var(--dur-fast) var(--ease-squish);
+  -webkit-tap-highlight-color: transparent;
+}
+.share-channel:active { transform: scale(0.92); }
+.share-channel__icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.4rem;
+  box-shadow: var(--sh-sm);
+}
+.share-channel__icon--sms { background: linear-gradient(180deg, #7DE08A, #3FBF63); }
+.share-channel__icon--whatsapp { background: linear-gradient(180deg, #4FE07A, #25B84C); }
+.share-channel__icon--email { background: linear-gradient(180deg, #6EC6FF, #3E9BEC); }
+.share-channel__icon--facebook { background: linear-gradient(180deg, #5A8CF0, #1877F2); }
+.share-channel__icon--x { background: linear-gradient(180deg, #333, #111); }
+.share-channel__label { font-size: 0.78rem; font-weight: 700; color: var(--navy-soft); }
+
+.share__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 3px solid #E4EEF6;
+  border-radius: var(--r-md);
+  padding: 8px 8px 8px 14px;
+  color: var(--navy-soft);
+}
+.share__link input {
+  flex: 1;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--navy);
+  min-width: 0;
+}
+.share__link input:focus { outline: none; }
+.share__note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--navy-soft);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.share__note svg { flex: 0 0 auto; color: var(--mint); }
+.share__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+@media (max-width: 480px) {
+  .share__actions { grid-template-columns: 1fr; }
+  .share__channels { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .share-channel__icon { width: 46px; height: 46px; font-size: 1.2rem; }
+}
