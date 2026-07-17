@@ -15,10 +15,11 @@ function fromBase64Url(b64: string): string {
 }
 
 // Short key map keeps the encoded URL compact.
+// Append-only — new keys go at the end so existing share links keep decoding.
 const KEYS: (keyof EditorState)[] = [
   'squishyType', 'primaryColour', 'secondaryColour', 'gradient', 'skin',
   'face', 'eyes', 'mouth', 'cheeks', 'accessories', 'name', 'personality',
-  'box', 'wrapping', 'ribbon', 'recipient', 'giftMessage',
+  'box', 'wrapping', 'ribbon', 'recipient', 'giftMessage', 'finish',
 ];
 
 export function encodeState(state: EditorState): string {

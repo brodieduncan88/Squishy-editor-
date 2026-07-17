@@ -190,6 +190,13 @@ function patternDefs(id: string, state: EditorState): string {
       <stop offset="74%" stop-color="${base}" stop-opacity="0.98"/>
       <stop offset="100%" stop-color="${gelEdge}" stop-opacity="1"/>
     </radialGradient>`);
+  // Opaque solid finish — the same spherical shading but fully opaque and no
+  // glitter, for a clean solid squishy.
+  defs.push(`<radialGradient id="${id}-solid" cx="39%" cy="30%" r="82%">
+      <stop offset="0%" stop-color="${shade(base, 0.42)}"/>
+      <stop offset="46%" stop-color="${base}"/>
+      <stop offset="100%" stop-color="${shade(base, -0.3)}"/>
+    </radialGradient>`);
   // Inner gel glow near the top-left — the deep, lit-from-within highlight.
   defs.push(`<radialGradient id="${id}-core" cx="40%" cy="27%" r="52%">
       <stop offset="0%" stop-color="${shade(base, 0.82)}" stop-opacity="0.92"/>
@@ -244,8 +251,8 @@ function bodyFill(id: string, state: EditorState): string {
   if (skin?.overlay && skin.overlay !== 'glitter') return `url(#${id}-${skin.overlay})`;
   if (state.gradient) return `url(#${id}-usergrad)`;
   if (COLOUR_MAP[state.primaryColour]?.metallic) return `url(#${id}-metal)`;
-  // Default body is now translucent gel rather than a flat fill.
-  return `url(#${id}-jelly)`;
+  // Solid finish is opaque; jelly finish is the translucent gel.
+  return state.finish === 'solid' ? `url(#${id}-solid)` : `url(#${id}-jelly)`;
 }
 
 /* small deterministic sparkles for glitter/galaxy (no RNG at render time) */
@@ -269,10 +276,12 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
   const base = COLOUR_MAP[state.primaryColour]?.hex ?? '#F9B5DE';
   const skin = SKIN_MAP[state.skin];
   const fill = bodyFill(id, state);
-  const glassy = !isMetallicLook(state);
-  // Softer, tinted edge for gel; a crisper edge for metals.
-  const stroke = shade(base, glassy ? -0.14 : -0.22);
-  const strokeOp = glassy ? 0.5 : 1;
+  const metallic = isMetallicLook(state);
+  const jelly = state.finish === 'jelly' && !metallic; // translucent + glitter
+  const shaded = !metallic; // solid and jelly both get 3D form shading
+  // Softer translucent edge for gel; crisper edge for solid/metal.
+  const stroke = shade(base, jelly ? -0.14 : -0.22);
+  const strokeOp = jelly ? 0.5 : metallic ? 1 : 0.7;
 
   const behind = (shape.behind ?? [])
     .map(
@@ -316,15 +325,14 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     )
     .join('');
 
-  // Glitter-resin finish: inner gel glow, suspended glitter + air bubbles.
-  // Metals stay clean/reflective and skip it.
+  // Inner top-left glow reads as lit volume on both solid and jelly.
+  // Suspended glitter + air bubbles are jelly-only.
   const seed = hashSeed(state.squishyType + state.primaryColour + state.skin);
-  const resin = glassy
-    ? `<g clip-path="url(#${clipId})">` +
-        `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-core)"/>` +
-        glitterField(seed, base) +
-        bubbleField(seed) +
-      `</g>`
+  const coreGlow = shaded
+    ? `<g clip-path="url(#${clipId})"><rect x="0" y="0" width="300" height="300" fill="url(#${id}-core)"/></g>`
+    : '';
+  const resin = jelly
+    ? `<g clip-path="url(#${clipId})">${glitterField(seed, base)}${bubbleField(seed)}</g>`
     : '';
 
   // Face
@@ -346,7 +354,7 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     .join('');
 
   // Volume shading, all clipped to the silhouette.
-  const formShade = glassy
+  const formShade = shaded
     ? `<g clip-path="url(#${clipId})">` +
         `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-cshadow)"/>` +
         `<rect x="0" y="0" width="300" height="300" fill="url(#${id}-bounce)"/>` +
@@ -364,8 +372,8 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     `<circle cx="180" cy="120" r="6" fill="#ffffff" opacity="0.7"/>` +
     `<circle cx="120" cy="98" r="10" fill="#ffffff" opacity="0.85"/>` +
     `</g>`;
-  // A faint glassy edge that catches the light all the way round.
-  const glassEdge = glassy
+  // A faint glassy edge that catches the light all the way round (jelly only).
+  const glassEdge = jelly
     ? `<path d="${shape.body}" fill="none" fill-rule="evenodd" stroke="#ffffff" stroke-width="2" opacity="0.35"/>`
     : '';
 
@@ -381,6 +389,7 @@ export function buildSquishy(state: EditorState, opts: BuildOpts = {}): string {
     ${body}
     ${overlay}
     ${toneDetails}
+    ${coreGlow}
     ${resin}
     ${formShade}
     ${ao}

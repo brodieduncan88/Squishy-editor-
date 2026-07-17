@@ -1,10 +1,13 @@
 /* The single editor state object + helpers for defaults and randomisation. */
 
+export type Finish = 'jelly' | 'solid';
+
 export interface EditorState {
   squishyType: string;
   primaryColour: string;
   secondaryColour: string;
   gradient: string | null; // gradient id overrides solid colour when set
+  finish: Finish; // translucent glitter vs opaque solid
   skin: string;
   face: string;
   eyes: string;
@@ -26,6 +29,7 @@ export const DEFAULT_STATE: EditorState = {
   primaryColour: 'pastel-pink',
   secondaryColour: 'pastel-lav',
   gradient: null,
+  finish: 'jelly',
   skin: 'solid',
   face: 'happy',
   eyes: 'round',

@@ -56,6 +56,23 @@ export function ColourPicker({ api }: { api: EditorApi }) {
   return (
     <>
       <PanelHeader title="Body colour" hint="Tap a colour, or try a gradient." />
+
+      <GroupLabel>Finish</GroupLabel>
+      <OptionGrid cols={2}>
+        <SelectTile
+          label="Glitter Jelly"
+          emoji="✨"
+          selected={api.state.finish === 'jelly'}
+          onSelect={() => api.set({ finish: 'jelly' })}
+        />
+        <SelectTile
+          label="Solid"
+          emoji="⬤"
+          selected={api.state.finish === 'solid'}
+          onSelect={() => api.set({ finish: 'solid' })}
+        />
+      </OptionGrid>
+
       {groups.map((g) => (
         <div key={g.key}>
           <GroupLabel>{g.label}</GroupLabel>

@@ -5,6 +5,7 @@ import Button, { IconButton } from '../ui/Button';
 import SquishyPreview from '../squishy/SquishyPreview';
 import { loadCreations, deleteCreation, type Creation } from '../lib/storage';
 import { downloadCard } from '../lib/exportImage';
+import { preset } from '../lib/presets';
 import './pages.css';
 
 export default function CreationsPage() {
@@ -77,23 +78,11 @@ export default function CreationsPage() {
 }
 
 function loadDefault() {
-  return {
+  return preset({
     squishyType: 'blob',
     primaryColour: 'pastel-lav',
-    secondaryColour: 'pastel-pink',
-    gradient: null,
     skin: 'holo',
     face: 'sleepy',
-    eyes: 'closed',
-    mouth: 'small',
-    cheeks: true,
-    accessories: [],
-    name: '',
     personality: 'Sleepy',
-    box: 'box-classic',
-    wrapping: 'wrap-dots',
-    ribbon: 'ribbon-gold',
-    recipient: '',
-    giftMessage: '',
-  };
+  });
 }
